@@ -11,6 +11,8 @@
 .svn/
 .swiftpm/
 migrate_working_dir/
+alex-ssh
+alex-ssh.pub
 
 # IntelliJ related
 *.iml
