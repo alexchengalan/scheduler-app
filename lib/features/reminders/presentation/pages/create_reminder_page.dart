@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scheduler/core/widgets/date_time_picker_field.dart';
 import 'package:scheduler/core/widgets/page_header_bar.dart';
-import 'package:scheduler/features/reminders/domain/entities/reminder_entity.dart';
 import 'package:scheduler/features/reminders/presentation/providers/reminder_form_provider.dart';
-import 'package:scheduler/features/reminders/presentation/providers/reminder_provider.dart';
 
 class CreateReminderPage extends ConsumerWidget {
   const CreateReminderPage({super.key});
@@ -49,7 +47,7 @@ class CreateReminderPage extends ConsumerWidget {
                     ),
                     onChanged: (val) => _onDescriptionChanged(ref, val),
                     minLines: 2,
-                    maxLines: null, // Allows growing with content
+                    maxLines: null,
                     keyboardType: TextInputType.multiline,
                   ),
                   spacing,
@@ -74,7 +72,7 @@ class CreateReminderPage extends ConsumerWidget {
                   ),
                   spacing,
                   DropdownButtonFormField<String>(
-                    value: state.frequency?.name,
+                    value: state.frequency?.name.toLowerCase(),
                     decoration: InputDecoration(
                       labelText: "Frequency",
                       prefixIcon: const Icon(Icons.repeat),
@@ -97,7 +95,6 @@ class CreateReminderPage extends ConsumerWidget {
                   spacing,
                   ElevatedButton.icon(
                     onPressed: () => _onSavePressed(context, ref),
-                    // icon: const Icon(Icons.save),
                     label: const Text("Save Reminder"),
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(50),
@@ -136,34 +133,18 @@ class CreateReminderPage extends ConsumerWidget {
 
   Future<void> _onSavePressed(BuildContext context, WidgetRef ref) async {
     final notifier = ref.read(reminderFormProvider.notifier);
-    final state = ref.read(reminderFormProvider);
 
-    if (notifier.isValid()) {
-      final reminder = ReminderEntity(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        title: state.title.trim(),
-        description: state.description.trim(),
-        dateTime: state.dateTime!,
-        remindAt: state.remindAt,
-        frequency: state.frequency,
-      );
+    final success = await notifier.submit();
 
-      final reminderNotifier = ref.read(reminderNotifierProvider.notifier);
-      final success = await reminderNotifier.addReminder(reminder);
-
-      if (context.mounted) {
-        if (success) {
-          Navigator.pop(context);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Failed to save reminder.")),
-          );
-        }
+    if (context.mounted) {
+      if (success) {
+        notifier.reset();
+        Navigator.pop(context);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Failed to save reminder(s).")),
+        );
       }
-    } else if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please complete all required fields.")),
-      );
     }
   }
 }

@@ -45,5 +45,42 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+	<string>fetch</string>
+	<string>remote-notification</string>
+	</array>
+
+<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+<string>We use your location to provide reminders.</string>
+<key>UIBackgroundModes</key>
+<array>
+  <string>fetch</string>
+  <string>remote-notification</string>
+</array>
+
+<key>NSUserNotificationAlertStyle</key>
+<string>alert</string>
+
+<key>NSAppTransportSecurity</key>
+<dict>
+  <key>NSAllowsArbitraryLoads</key>
+  <true/>
+</dict>
+
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>We use your location to provide reminders.</string>
+
+<key>NSCalendarsUsageDescription</key>
+<string>Access to calendar is needed to set reminders.</string>
+
+<key>NSUserNotificationUsageDescription</key>
+<string>This app uses notifications to remind you of scheduled tasks.</string>
+
+<key>UIBackgroundModes</key>
+<array>
+  <string>remote-notification</string>
+  <string>fetch</string>
+</array>
 </dict>
 </plist>

@@ -1,11 +1,16 @@
 import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:scheduler/core/services/notification_service.dart';
 import 'package:scheduler/features/reminders/data/datasources/local_datasource.dart';
 import 'package:scheduler/features/reminders/data/models/reminder_model.dart';
 import 'package:scheduler/features/reminders/data/repositories/reminder_repository_impl.dart';
 import 'package:scheduler/features/reminders/domain/entities/reminder_entity.dart';
 import 'package:scheduler/features/reminders/domain/repositories/reminder_repository.dart';
 import 'package:scheduler/features/reminders/presentation/notifier/reminder_notifier.dart';
+
+final notificationServiceProvider = Provider<NotificationService>((ref) {
+  return NotificationService();
+});
 
 final hiveBoxProvider = Provider<Box<ReminderModel>>(
   (ref) => Hive.box<ReminderModel>('reminders'),
@@ -20,6 +25,8 @@ final reminderRepositoryProvider = Provider<ReminderRepository>(
 );
 
 final reminderNotifierProvider =
-    StateNotifierProvider<ReminderNotifier, List<ReminderEntity>>(
-      (ref) => ReminderNotifier(ref.read(reminderRepositoryProvider)),
-    );
+    StateNotifierProvider<ReminderNotifier, List<ReminderEntity>>((ref) {
+      final repository = ref.read(reminderRepositoryProvider);
+      final notificationService = ref.read(notificationServiceProvider);
+      return ReminderNotifier(repository, notificationService);
+    });

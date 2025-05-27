@@ -31,12 +31,15 @@ class ReminderDetailModal extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 16),
+
           if (reminder.description != null && reminder.description!.isNotEmpty)
             Text(
               reminder.description!,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
+
           const SizedBox(height: 16),
+
           Row(
             children: [
               const Icon(Icons.calendar_today, size: 20),
@@ -47,7 +50,23 @@ class ReminderDetailModal extends ConsumerWidget {
               ),
             ],
           ),
+
           const SizedBox(height: 8),
+
+          if (reminder.remindAt != null)
+            Row(
+              children: [
+                const Icon(Icons.alarm, size: 20),
+                const SizedBox(width: 8),
+                Text(
+                  '${reminder.remindAt!.toLocal()}'.split('.')[0],
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ],
+            ),
+
+          const SizedBox(height: 8),
+
           if (reminder.frequency != null)
             Row(
               children: [
@@ -59,7 +78,9 @@ class ReminderDetailModal extends ConsumerWidget {
                 ),
               ],
             ),
+
           const SizedBox(height: 24),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
