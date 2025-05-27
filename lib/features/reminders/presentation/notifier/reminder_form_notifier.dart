@@ -6,10 +6,16 @@ class ReminderFormNotifier extends StateNotifier<ReminderFormState> {
   ReminderFormNotifier() : super(const ReminderFormState());
 
   void setTitle(String title) => state = state.copyWith(title: title);
+
   void setDescription(String description) =>
       state = state.copyWith(description: description);
+
   void setDateTime(DateTime dateTime) =>
       state = state.copyWith(dateTime: dateTime);
+
+  void setRemindAt(DateTime remindAt) =>
+      state = state.copyWith(remindAt: remindAt); // ✅ New method
+
   void setFrequency(String freqStr) {
     final frequency = ReminderFrequency.values.firstWhere(
       (f) => f.name.toLowerCase() == freqStr.toLowerCase(),
@@ -23,6 +29,6 @@ class ReminderFormNotifier extends StateNotifier<ReminderFormState> {
   }
 
   void reset() {
-    state = ReminderFormState(); // Reset to default initial state
+    state = ReminderFormState();
   }
 }

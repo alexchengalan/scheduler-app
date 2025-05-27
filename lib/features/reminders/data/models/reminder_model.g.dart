@@ -23,13 +23,14 @@ class ReminderModelAdapter extends TypeAdapter<ReminderModel> {
       imagePath: fields[3] as String?,
       dateTime: fields[4] as DateTime,
       frequency: fields[5] as ReminderFrequency?,
+      remindAt: fields[6] as DateTime?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ReminderModel obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class ReminderModelAdapter extends TypeAdapter<ReminderModel> {
       ..writeByte(4)
       ..write(obj.dateTime)
       ..writeByte(5)
-      ..write(obj.frequency);
+      ..write(obj.frequency)
+      ..writeByte(6)
+      ..write(obj.remindAt);
   }
 
   @override

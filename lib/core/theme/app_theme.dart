@@ -15,7 +15,7 @@ class AppTheme {
   // Dark Mode Colors
   static const _darkBackground = Color(0xFF0F1117);
   static const _darkCard = Color(0xFF1C1F26);
-  static const _darkTitleText = Color(0xFFF1F1F1);
+  static const _darkTitleText = Color(0xFFFFFFFF);
   static const _darkDescriptionText = Color(0xFFB0B3B8);
   static const _darkButtonBackground = Color(0xFFF1F1F1);
   static const _darkButtonText = Colors.black;
@@ -112,7 +112,7 @@ class AppTheme {
         color: _darkTitleText,
         fontWeight: FontWeight.bold,
       ),
-      bodyMedium: GoogleFonts.poppins(color: _darkDescriptionText),
+      bodyMedium: GoogleFonts.poppins(color: _darkTitleText),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -135,8 +135,10 @@ class AppTheme {
       ),
     ),
     dropdownMenuTheme: DropdownMenuThemeData(
+      inputDecorationTheme: InputDecorationTheme(fillColor: _lightCard),
       textStyle: GoogleFonts.poppins(
         color: _darkTitleText,
+        backgroundColor: Colors.white,
         fontWeight: FontWeight.w500,
       ),
     ),

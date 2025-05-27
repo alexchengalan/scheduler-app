@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:scheduler/core/widgets/date_time_picker_field.dart';
 import 'package:scheduler/core/widgets/page_header_bar.dart';
 import 'package:scheduler/features/reminders/domain/entities/reminder_entity.dart';
 import 'package:scheduler/features/reminders/presentation/providers/reminder_form_provider.dart';
@@ -28,6 +29,7 @@ class CreateReminderPage extends ConsumerWidget {
               child: Column(
                 children: [
                   TextFormField(
+                    style: Theme.of(context).textTheme.bodyMedium,
                     initialValue: state.title,
                     decoration: InputDecoration(
                       labelText: "Title",
@@ -38,6 +40,7 @@ class CreateReminderPage extends ConsumerWidget {
                   ),
                   spacing,
                   TextFormField(
+                    style: Theme.of(context).textTheme.bodyMedium,
                     initialValue: state.description,
                     decoration: InputDecoration(
                       labelText: "Description",
@@ -45,23 +48,29 @@ class CreateReminderPage extends ConsumerWidget {
                       border: border,
                     ),
                     onChanged: (val) => _onDescriptionChanged(ref, val),
-                    maxLines: 2,
+                    minLines: 2,
+                    maxLines: null, // Allows growing with content
+                    keyboardType: TextInputType.multiline,
                   ),
                   spacing,
-                  InkWell(
-                    onTap: () => _selectDateTime(context, ref),
-                    child: InputDecorator(
-                      decoration: InputDecoration(
-                        labelText: "Date & Time",
-                        prefixIcon: const Icon(Icons.calendar_today),
-                        border: border,
-                      ),
-                      child: Text(
-                        state.dateTime != null
-                            ? '${state.dateTime}'.split('.')[0]
-                            : 'Tap to select',
-                      ),
-                    ),
+                  DateTimePickerField(
+                    label: "Date & Time",
+                    icon: Icons.calendar_today,
+                    dateTime: state.dateTime,
+                    onDateTimeSelected:
+                        (val) => ref
+                            .read(reminderFormProvider.notifier)
+                            .setDateTime(val),
+                  ),
+                  spacing,
+                  DateTimePickerField(
+                    label: "Remind Me On",
+                    icon: Icons.notifications,
+                    dateTime: state.remindAt,
+                    onDateTimeSelected:
+                        (val) => ref
+                            .read(reminderFormProvider.notifier)
+                            .setRemindAt(val),
                   ),
                   spacing,
                   DropdownButtonFormField<String>(
@@ -76,7 +85,10 @@ class CreateReminderPage extends ConsumerWidget {
                             .map(
                               (f) => DropdownMenuItem(
                                 value: f.toLowerCase(),
-                                child: Text(f),
+                                child: Text(
+                                  f,
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
                               ),
                             )
                             .toList(),
@@ -85,7 +97,8 @@ class CreateReminderPage extends ConsumerWidget {
                   spacing,
                   ElevatedButton.icon(
                     onPressed: () => _onSavePressed(context, ref),
-                    label: const Text("Save"),
+                    // icon: const Icon(Icons.save),
+                    label: const Text("Save Reminder"),
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(50),
                       shape: RoundedRectangleBorder(
@@ -101,10 +114,6 @@ class CreateReminderPage extends ConsumerWidget {
       ),
     );
   }
-
-  // -------------------------
-  // Callback Functions
-  // -------------------------
 
   void _onClosePressed(BuildContext context, WidgetRef ref) {
     ref.read(reminderFormProvider.notifier).reset();
@@ -125,30 +134,6 @@ class CreateReminderPage extends ConsumerWidget {
     }
   }
 
-  Future<void> _selectDateTime(BuildContext context, WidgetRef ref) async {
-    final notifier = ref.read(reminderFormProvider.notifier);
-
-    final date = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2100),
-    );
-
-    if (date != null && context.mounted) {
-      final time = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.now(),
-      );
-
-      if (time != null) {
-        notifier.setDateTime(
-          DateTime(date.year, date.month, date.day, time.hour, time.minute),
-        );
-      }
-    }
-  }
-
   Future<void> _onSavePressed(BuildContext context, WidgetRef ref) async {
     final notifier = ref.read(reminderFormProvider.notifier);
     final state = ref.read(reminderFormProvider);
@@ -159,6 +144,7 @@ class CreateReminderPage extends ConsumerWidget {
         title: state.title.trim(),
         description: state.description.trim(),
         dateTime: state.dateTime!,
+        remindAt: state.remindAt,
         frequency: state.frequency,
       );
 

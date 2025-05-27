@@ -5,12 +5,14 @@ class ReminderFormState extends Equatable {
   final String title;
   final String description;
   final DateTime? dateTime;
+  final DateTime? remindAt;
   final ReminderFrequency? frequency;
 
   const ReminderFormState({
     this.title = '',
     this.description = '',
     this.dateTime,
+    this.remindAt,
     this.frequency,
   });
 
@@ -18,16 +20,24 @@ class ReminderFormState extends Equatable {
     String? title,
     String? description,
     DateTime? dateTime,
+    DateTime? remindAt,
     ReminderFrequency? frequency,
   }) {
     return ReminderFormState(
       title: title ?? this.title,
       description: description ?? this.description,
       dateTime: dateTime ?? this.dateTime,
+      remindAt: remindAt ?? this.remindAt,
       frequency: frequency ?? this.frequency,
     );
   }
 
   @override
-  List<Object?> get props => [title, description, dateTime, frequency];
+  List<Object?> get props => [
+    title,
+    description,
+    dateTime,
+    remindAt,
+    frequency,
+  ]; // ✅ Updated props
 }

@@ -23,6 +23,9 @@ class ReminderModel extends HiveObject {
   @HiveField(5)
   final ReminderFrequency? frequency;
 
+  @HiveField(6)
+  final DateTime? remindAt;
+
   ReminderModel({
     required this.id,
     required this.title,
@@ -30,6 +33,7 @@ class ReminderModel extends HiveObject {
     this.imagePath,
     required this.dateTime,
     this.frequency,
+    this.remindAt,
   });
 
   /// Convert from entity
@@ -41,6 +45,7 @@ class ReminderModel extends HiveObject {
       imagePath: entity.imagePath,
       dateTime: entity.dateTime,
       frequency: entity.frequency,
+      remindAt: entity.remindAt,
     );
   }
 
@@ -53,6 +58,7 @@ class ReminderModel extends HiveObject {
       imagePath: imagePath,
       dateTime: dateTime,
       frequency: frequency,
+      remindAt: remindAt,
     );
   }
 }

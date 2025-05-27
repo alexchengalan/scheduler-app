@@ -10,7 +10,7 @@ class ReminderDetailModal extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Padding(
+    return Container(
       padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 30),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -21,7 +21,7 @@ class ReminderDetailModal extends ConsumerWidget {
               Expanded(
                 child: Text(
                   reminder.title,
-                  style: Theme.of(context).textTheme.headlineSmall,
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
               ),
               IconButton(

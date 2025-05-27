@@ -5,6 +5,7 @@ class ReminderEntity {
   final String? imagePath;
   final DateTime dateTime;
   final ReminderFrequency? frequency;
+  final DateTime? remindAt;
 
   ReminderEntity({
     required this.id,
@@ -13,6 +14,7 @@ class ReminderEntity {
     this.imagePath,
     required this.dateTime,
     this.frequency,
+    this.remindAt,
   });
 }
 
