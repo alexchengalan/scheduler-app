@@ -45,6 +45,7 @@ class AppTheme {
           fontWeight: FontWeight.bold,
           fontSize: 16,
         ),
+        iconColor: _lightButtonText
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
@@ -122,6 +123,7 @@ class AppTheme {
           fontWeight: FontWeight.bold,
           fontSize: 16,
         ),
+        iconColor: _darkButtonText
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scheduler/core/utils/gradient_color_picker.dart';
 import 'package:scheduler/core/utils/icon_picker_service.dart';
@@ -22,67 +23,89 @@ class RemindersListPage extends ConsumerWidget {
       );
     }
 
-    return ListView.builder(
-      itemCount: reminders.length,
-      itemBuilder: (context, index) {
-        final reminder = reminders[index];
-        final List<Color> gradientColors = GradientColorPicker.pickGradient(
-          index,
-        );
-        return InkWell(
-          onTap:
-              () => showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                ),
-                builder: (_) => ReminderDetailModal(reminder: reminder),
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          backgroundColor: Colors.transparent,
+          pinned: true,
+          floating: false,
+          expandedHeight: 100,
+          flexibleSpace: FlexibleSpaceBar(
+            title: Text(
+              'My Reminders',
+              style: GoogleFonts.poppins(
+                color: Theme.of(context).textTheme.headlineMedium?.color,
+                fontWeight: FontWeight.bold,
               ),
-          child: Container(
-            margin: const EdgeInsets.only(bottom: 12, left: 12, right: 12),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: gradientColors,
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(20),
+              textAlign: TextAlign.left,
             ),
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  IconCircle(
-                    icon: iconPicker.pickIcon(reminder.title),
-                    backgroundColor: const Color(0xFFf2f4f3),
-                    iconColor: gradientColors[0],
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          reminder.title,
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          reminder.description ?? '',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        const SizedBox(height: 50),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            titlePadding: EdgeInsets.only(left: 16, bottom: 16),
           ),
-        );
-      },
+        ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+            final reminder = reminders[index];
+            final List<Color> gradientColors = GradientColorPicker.pickGradient(
+              index,
+            );
+            return InkWell(
+              onTap:
+                  () => showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                    ),
+                    builder: (_) => ReminderDetailModal(reminder: reminder),
+                  ),
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 12, left: 12, right: 12),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: gradientColors,
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      IconCircle(
+                        icon: iconPicker.pickIcon(reminder.title),
+                        backgroundColor: const Color(0xFFf2f4f3),
+                        iconColor: gradientColors[0],
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              reminder.title,
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              reminder.description ?? '',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            const SizedBox(height: 50),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }, childCount: reminders.length),
+        ),
+      ],
     );
   }
 }

@@ -11,6 +11,7 @@ class ReminderDetailModal extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
       padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 30),
       child: Column(
         mainAxisSize: MainAxisSize.min,
