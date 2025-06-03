@@ -3,7 +3,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scheduler/core/utils/calendar_event_mapper.dart';
 import 'package:scheduler/features/reminders/domain/entities/reminder_entity.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:scheduler/core/widgets/page_header_bar.dart';
 import 'package:scheduler/core/widgets/today_button.dart';
 import 'package:scheduler/features/reminders/presentation/providers/reminder_provider.dart';
 import 'package:scheduler/features/reminders/presentation/widgets/reminder_list_view.dart';
@@ -76,10 +75,10 @@ class _RemindersCalendarPageState extends ConsumerState<RemindersCalendarPage> {
             });
           },
           calendarStyle: CalendarStyle(
-            markerDecoration: const BoxDecoration(
-              color: Colors.blueAccent,
-              shape: BoxShape.circle,
-            ),
+            // markerDecoration: const BoxDecoration(
+            //   color: Colors.blueAccent,
+            //   shape: BoxShape.circle,
+            // ),
             todayDecoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primary,
               shape: BoxShape.circle,
@@ -89,7 +88,25 @@ class _RemindersCalendarPageState extends ConsumerState<RemindersCalendarPage> {
               shape: BoxShape.circle,
             ),
           ),
+          calendarBuilders: CalendarBuilders(
+            markerBuilder: (context, day, events) {
+              if (events.isEmpty) return const SizedBox.shrink();
+              return Positioned(
+                bottom: 12,
+                child: Container(
+                  width: 24,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.amber,
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              );
+            },
+          ),
         ),
+
         const SizedBox(height: 16),
         Expanded(child: ReminderListView(reminders: selectedReminders)),
       ],
